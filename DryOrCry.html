@@ -13182,31 +13182,18 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="k">import</span> <span class="n">widgets</span>
 
 <span class="kn">import</span> <span class="nn">nbinteract</span> <span class="k">as</span> <span class="nn">nbi</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="sd">&quot;&quot;&quot;nbi:hide_in&quot;&quot;&quot;</span>
 
+
 <span class="n">appid1</span> <span class="o">=</span> <span class="s1">&#39;3776d7611658054f9cdd2b4b06ef1bc3&#39;</span>
 <span class="n">appid2</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="n">densityWater</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1">#kg m⁻³</span>
 <span class="n">lavariable</span> <span class="o">=</span> <span class="mf">0.1</span>
-
-<span class="k">def</span> <span class="nf">evaporationRate</span><span class="p">(</span><span class="n">Tair</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">relativeHumidity</span><span class="p">,</span><span class="n">windSpeed</span><span class="p">,</span> <span class="n">Rn</span><span class="p">):</span>
-  <span class="n">T</span> <span class="o">=</span> <span class="n">Tair</span>
-  <span class="n">RnMJm2day</span> <span class="o">=</span> <span class="n">Rn</span><span class="o">*</span><span class="mf">10.08</span><span class="o">/</span><span class="mi">117</span>
-  <span class="n">Delta</span> <span class="o">=</span> <span class="mi">5336</span><span class="o">/</span><span class="n">T</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">21.07</span><span class="o">-</span><span class="mi">5336</span><span class="o">/</span><span class="n">T</span><span class="p">)</span>
-  <span class="n">ea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">21.07</span><span class="o">-</span><span class="mi">5336</span><span class="o">/</span><span class="n">T</span><span class="p">)</span>
-  <span class="n">D</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">relativeHumidity</span><span class="p">)</span><span class="o">*</span><span class="n">ea</span>
-  <span class="n">lambd</span> <span class="o">=</span> <span class="mf">2.501</span> <span class="o">-</span> <span class="mf">0.002361</span><span class="o">*</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="mi">273</span><span class="p">)</span>
-  <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.0016286</span> <span class="o">*</span> <span class="n">pressure</span> <span class="o">/</span> <span class="n">lambd</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">Delta</span><span class="o">*</span><span class="n">RnMJm2day</span> <span class="o">+</span> <span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="mf">6.43</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.5536</span><span class="o">*</span><span class="n">windSpeed</span><span class="p">)</span><span class="o">*</span><span class="n">D</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">lambd</span><span class="o">*</span><span class="p">(</span><span class="n">Delta</span><span class="o">+</span><span class="n">gamma</span><span class="p">))</span>
-
-<span class="c1">#TIME</span>
-<span class="k">def</span> <span class="nf">dryingtime</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">massClothes</span><span class="p">,</span> <span class="n">areaClothes</span><span class="p">):</span>
-  <span class="n">rhoE</span> <span class="o">=</span> <span class="mf">4.58e-5</span><span class="o">/</span><span class="mf">3.957</span><span class="o">*</span><span class="n">E</span>
-  <span class="k">return</span> <span class="n">massClothes</span><span class="o">/</span><span class="p">(</span><span class="mf">4.58e-5</span><span class="o">/</span><span class="mf">3.957</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">areaClothes</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">evaporationRate</span><span class="p">(</span><span class="n">Tair</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">relativeHumidity</span><span class="p">,</span><span class="n">windSpeed</span><span class="p">,</span> <span class="n">Rn</span><span class="p">):</span>
   <span class="n">T</span> <span class="o">=</span> <span class="n">Tair</span>
@@ -13242,8 +13229,7 @@ div#notebook {
       <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">newarg</span><span class="p">):</span>
         <span class="n">newarg</span> <span class="o">=</span> <span class="n">newarg</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>
       <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">newarg</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg</span><span class="p">])</span>
-  
-
+      
 <span class="k">class</span> <span class="nc">Forecast</span><span class="p">():</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">forecast</span> <span class="o">=</span> <span class="p">{}</span>
@@ -13275,7 +13261,7 @@ div#notebook {
       <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
       
-
+      
 <span class="k">def</span> <span class="nf">getweath</span><span class="p">(</span><span class="n">city</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  This function request the atmospheric live time data to the API </span>
@@ -13310,22 +13296,11 @@ div#notebook {
   
   <span class="k">return</span> <span class="n">weath</span><span class="p">,</span> <span class="n">forec</span>
     
-
+  
+  
 <span class="k">def</span> <span class="nf">demana_ciutat</span><span class="p">():</span>
-  <span class="n">city</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Where do you live? &quot;</span><span class="p">))</span>
+  <span class="n">city</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Input city: &quot;</span><span class="p">))</span>
   <span class="k">return</span> <span class="n">city</span>
-
-
-<span class="c1">#Atmospheric Data</span>
-<span class="k">def</span> <span class="nf">useful_data</span><span class="p">(</span><span class="n">weath</span><span class="p">):</span>
-  <span class="n">Tair</span> <span class="o">=</span> <span class="n">weath</span><span class="o">.</span><span class="n">maintemp</span>
-  <span class="n">pressure</span> <span class="o">=</span> <span class="n">weath</span><span class="o">.</span><span class="n">mainpressure</span><span class="o">/</span><span class="mi">10</span> <span class="c1">#kPa</span>
-  <span class="n">relativeHumidity</span> <span class="o">=</span> <span class="n">weath</span><span class="o">.</span><span class="n">mainhumidity</span><span class="o">/</span><span class="mi">100</span> <span class="c1">#out of 1</span>
-  <span class="n">windSpeed</span> <span class="o">=</span> <span class="n">weath</span><span class="o">.</span><span class="n">windspeed</span> <span class="c1">#m/s</span>
-  <span class="n">latitud</span> <span class="o">=</span> <span class="p">(</span><span class="n">weath</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">360</span><span class="p">)</span> <span class="c1">#radians</span>
-  <span class="n">radiation</span> <span class="o">=</span> <span class="n">weath</span><span class="o">.</span><span class="n">value</span><span class="o">*</span><span class="mi">3</span><span class="o">*</span><span class="mi">25</span> <span class="c1">#weath.value is UV radiation</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">Tair</span><span class="p">,</span><span class="n">pressure</span><span class="p">,</span><span class="n">relativeHumidity</span><span class="p">,</span><span class="n">windSpeed</span><span class="p">,</span><span class="n">latitud</span><span class="p">,</span><span class="n">radiation</span><span class="p">)</span>
-
 
 <span class="n">a1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*.</span><span class="mi">002</span> <span class="c1">#m^3</span>
 <span class="n">m1</span> <span class="o">=</span> <span class="mf">0.075</span> <span class="c1">#kg</span>
@@ -13368,10 +13343,15 @@ div#notebook {
   
   <span class="k">def</span> <span class="nf">timeall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">curweath</span><span class="p">):</span>
     <span class="n">E</span> <span class="o">=</span> <span class="n">evaporationRate</span><span class="p">(</span><span class="n">curweath</span><span class="o">.</span><span class="n">maintemp</span><span class="p">,</span> <span class="n">curweath</span><span class="o">.</span><span class="n">mainpressure</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="n">curweath</span><span class="o">.</span><span class="n">mainhumidity</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span> <span class="n">curweath</span><span class="o">.</span><span class="n">windspeed</span><span class="p">,</span> <span class="n">curweath</span><span class="o">.</span><span class="n">value</span><span class="o">*</span><span class="mi">25</span><span class="o">*</span><span class="n">lavariable</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">dryingtime</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">waterw</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">surface</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">el</span><span class="p">:</span> <span class="n">dryingtime</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">waterw</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">surface</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">}</span>
   
   <span class="k">def</span> <span class="nf">timemax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">curweath</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeall</span><span class="p">(</span><span class="n">curweath</span><span class="p">))</span>
+    <span class="n">isthere</span> <span class="o">=</span> <span class="p">{</span><span class="n">el</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">amount</span><span class="p">))</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">}</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeall</span><span class="p">(</span><span class="n">curweath</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">isthere</span><span class="p">[</span><span class="n">el</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">times</span><span class="p">[</span><span class="n">el</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">times</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    
 
 <span class="k">class</span> <span class="nc">Cloth</span><span class="p">:</span>
   <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">kind</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
@@ -13383,35 +13363,19 @@ div#notebook {
   
   <span class="k">def</span> <span class="nf">waterw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">*</span><span class="n">slope</span>
-
-<span class="k">def</span> <span class="nf">showclothes</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
-  <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">out = interact(showclothes,</span>
-<span class="sd">        a=IntSlider(value=0, min=0, max=10, step=1, description=&#39;Sock pairs&#39;),               </span>
-<span class="sd">        b=IntSlider(value=0, min=0, max=10, step=1, description=&#39;Underwear&#39;), </span>
-<span class="sd">        c=IntSlider(value=0, min=0, max=10, step=1, description=&#39;T-Shirts&#39;),</span>
-<span class="sd">        d=IntSlider(value=0, min=0, max=10, step=1, description=&#39;Towels&#39;),</span>
-<span class="sd">        e=IntSlider(value=0, min=0, max=10, step=1, description=&#39;Sweaters&#39;), </span>
-<span class="sd">        f=IntSlider(value=0, min=0, max=10, step=1, description=&#39;Trousers&#39;), </span>
-<span class="sd">        g=IntSlider(value=0, min=0, max=10, step=1, description=&#39;Bed Sheets&#39;))</span>
-
-
-<span class="sd">clothes = Clothes()</span>
-<span class="sd">clothes.addmany(out.widget.result)</span>
-
-<span class="sd">print(&#39;Drying time: {}&#39;.format(time.strftime(&#39;%H:%M:%S&#39;, time.gmtime(clothes.timemax(weath)))))</span>
-<span class="sd">tup = forec.warn()</span>
-<span class="sd">print(&#39;Warning: on {}: there will be {}!&#39;.format(tup[0], tup[1]))</span>
-<span class="sd">&quot;&quot;&quot;</span>
+  
+  
 <span class="k">def</span> <span class="nf">main_program</span><span class="p">():</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="n">ciutat</span> <span class="o">=</span> <span class="n">demana_ciutat</span><span class="p">()</span>
   <span class="n">weath</span><span class="p">,</span><span class="n">forec</span> <span class="o">=</span> <span class="n">getweath</span><span class="p">(</span><span class="n">ciutat</span><span class="p">)</span>
   
+  
   <span class="c1">#Tair, pressure, relativeHumidity, windSpeed, latitud, radiation = useful_data(weath)</span>
   <span class="c1">#evaporation_rate = evaporationRate(Tair, pressure, relativeHumidity,windSpeed,radiation)</span>
+  <span class="k">def</span> <span class="nf">showclothes</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span>
   <span class="n">out</span> <span class="o">=</span> <span class="n">interact</span><span class="p">(</span><span class="n">showclothes</span><span class="p">,</span>
         <span class="n">a</span><span class="o">=</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Sock pairs&#39;</span><span class="p">),</span>               
         <span class="n">b</span><span class="o">=</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Underwear&#39;</span><span class="p">),</span> 
@@ -13420,12 +13384,23 @@ div#notebook {
         <span class="n">e</span><span class="o">=</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Sweaters&#39;</span><span class="p">),</span> 
         <span class="n">f</span><span class="o">=</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Trousers&#39;</span><span class="p">),</span> 
         <span class="n">g</span><span class="o">=</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Bed Sheets&#39;</span><span class="p">))</span>
-  <span class="n">clothes</span> <span class="o">=</span> <span class="n">Clothes</span><span class="p">()</span>
-  <span class="n">clothes</span><span class="o">.</span><span class="n">addmany</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
   
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Drying time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">clothes</span><span class="o">.</span><span class="n">timemax</span><span class="p">(</span><span class="n">weath</span><span class="p">)))))</span>
-  <span class="n">tup</span> <span class="o">=</span> <span class="n">forec</span><span class="o">.</span><span class="n">warn</span><span class="p">()</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: on </span><span class="si">{}</span><span class="s1">: there will be </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+  <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
+  <span class="n">button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Continue&quot;</span><span class="p">)</span>
+  <span class="n">output</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
+
+  <span class="n">display</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">on_button_clicked</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">clothes</span> <span class="o">=</span> <span class="n">Clothes</span><span class="p">()</span>
+    <span class="n">clothes</span><span class="o">.</span><span class="n">addmany</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Drying time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">clothes</span><span class="o">.</span><span class="n">timemax</span><span class="p">(</span><span class="n">weath</span><span class="p">)))))</span>
+    <span class="n">tup</span> <span class="o">=</span> <span class="n">forec</span><span class="o">.</span><span class="n">warn</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: on </span><span class="si">{}</span><span class="s1">: there will be </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+  <span class="n">button</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">on_button_clicked</span><span class="p">)</span>
+
+  
   
 <span class="n">main_program</span><span class="p">()</span>
 </pre></div>
@@ -13434,20 +13409,73 @@ div#notebook {
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Input city: Barcelona
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    
+
+
+
+  <div class="output_subarea output_widget_view ">
+    <button class="js-nbinteract-widget">
+      Loading widgets...
+    </button>
   </div>
 
-  
+</div>
 
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
+<div class="output_area">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
+    
 
-    </div>
+
+
+  <div class="output_subarea output_widget_view ">
+    <button class="js-nbinteract-widget">
+      Loading widgets...
+    </button>
+  </div>
+
+</div>
+
+<div class="output_area">
+
+    
+
+
+
+  <div class="output_subarea output_widget_view ">
+    <button class="js-nbinteract-widget">
+      Loading widgets...
+    </button>
+  </div>
+
+</div>
+
+<div class="output_area">
+
+    
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Drying time: 10:36:22
+Warning: on 2019-10-13 09:00:00: there will be light rain!
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
